@@ -11,7 +11,9 @@ var recognizedPhrase = "";
 var languages = {
     "ru": "ru-RU",
     "es": "es-ES",
-    "zh": "zh-CN"
+    "zh": "zh-CN",
+    "ja": "ja-JP",
+    "pt": "pt-BR"
 };
 
 var canvas = document.createElement('canvas');
@@ -32,6 +34,10 @@ var constraints = {
         facingMode: facingMode
     }
 };
+
+$(document).ready(function() {
+    $('select').niceSelect();
+});
 
 /* Stream it to video element */
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
@@ -285,6 +291,7 @@ function UpdateRecognizedPhrase(json) {
 }
 
 function OnComplete() {
+
     var fromLanguage = document.getElementById("FromLanguage").value;
     takePictureBtn.html('<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>');
 
