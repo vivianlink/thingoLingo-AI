@@ -1,10 +1,17 @@
-
 var GOOGLE_VISION_API_KEY = "AIzaSyDsrEnDMhouDfmFHEUHYKZTk2JjvSGcVP0";
 var BING_SPEECH_API_KEY = "0025f47a1c084e208f9e6c3ed415f6f1";
 var width = 800;
 var height = 1200;
 
+var recognizedWords = [];
+
 var recognizedPhrase = "";
+
+var languages = {
+    "ru": "ru-RU",
+    "es": "es-ES",
+    "zh": "zh-CN"
+};
 
 var canvas = document.createElement('canvas');
 var video = document.getElementById('video');
@@ -25,24 +32,18 @@ var constraints = {
 };
 
 /* Stream it to video element */
+navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
+    navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.mediaDevices.getUserMedia;
 navigator.mediaDevices.getUserMedia(constraints).then(function success(stream) {
     video.srcObject = stream;
 });
 
 $(".js-take-picture").click(function() {
-    var fromLanguage = document.getElementById("FromLanguage").value;
-    // getCurrentItem();
-    translateLanguage(fromLanguage, 'Plátano', function(translated) {
-        console.log(translated);
-        checkAnswer(translated, ["orange", "banan", "apple"]);
-    });
     getCurrentItems(function(words) {
-        console.log(words);
+        recognizedWords = words;
     });
 
-    if (!recognizer) {
-        Setup();
-    }
+    Setup();
 
     recognizedPhrase = "";
     RecognizerStart(SDK, recognizer);
@@ -252,7 +253,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function Setup() {
-    recognizer = RecognizerSetup(SDK, "Interactive", "en-US", SDK.SpeechResultFormat.Simple, BING_SPEECH_API_KEY);
+    recognizer = RecognizerSetup(SDK, "Interactive", languages[document.getElementById("FromLanguage").value], SDK.SpeechResultFormat.Simple, BING_SPEECH_API_KEY);
 }
 
 function UpdateStatus(status) {
@@ -275,5 +276,18 @@ function UpdateRecognizedPhrase(json) {
 }
 
 function OnComplete() {
-    console.log("complete");
+    var fromLanguage = document.getElementById("FromLanguage").value;
+
+    translateLanguage(fromLanguage, recognizedPhrase, function(translated) {
+        console.log("Recognized Words:");
+        console.log(recognizedWords);
+        console.log("");
+        console.log("Recognized Phrase:");
+        console.log(recognizedPhrase);
+        console.log("");
+        console.log("Translated Phrase:");
+        console.log(translated);
+        console.log("");
+        checkAnswer(translated, recognizedWords);
+    });
 }
