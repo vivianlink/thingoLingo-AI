@@ -5,16 +5,25 @@
 }
 
 .video {
-    position: relative;
+    position: fixed;
+    left: 0;
+    top: 0;
     z-index: -5;
-    margin-bottom: -200px;
 }
 
 .wrapper-dropdown {
-    margin-bottom: -50px;
+    position: absolute;
 }
 
 .buttonStyle{
+    width: 220px;
+    height: 80px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto auto;
     z-index: 10;
     border-color: #39a6d7;
     background-color: white;

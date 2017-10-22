@@ -16,6 +16,8 @@ var languages = {
     "pt": "pt-BR"
 };
 
+var recording = false;
+
 var canvas = document.createElement('canvas');
 var video = document.getElementById('video');
 var takePictureBtn = $(".js-take-picture");
@@ -47,15 +49,20 @@ navigator.mediaDevices.getUserMedia(constraints).then(function success(stream) {
 });
 
 takePictureBtn.click(function() {
-    takePictureBtn.html('<i class="fa fa-assistive-listening-systems" aria-hidden="true"></i>');
-    getCurrentItems(function(words) {
-        recognizedWords = words;
-    });
+    if (!recording) {
+        takePictureBtn.html('<i class="fa fa-assistive-listening-systems" aria-hidden="true"></i>');
+        getCurrentItems(function(words) {
+            recognizedWords = words;
+        });
 
-    Setup();
+        Setup();
 
-    recognizedPhrase = "";
-    RecognizerStart(SDK, recognizer);
+        recognizedPhrase = "";
+        RecognizerStart(SDK, recognizer);
+        recording = true;
+    } else {
+        RecognizerStop(SDK, recognizer);
+    }
 });
 
 function getCurrentFrame() {
@@ -87,6 +94,8 @@ function translateLanguage(sourceLanguage, targetLanguage, sourceText, callback)
         error: function(response) {
             console.log("ajax error");
             console.log(response.responseText);
+
+            callback("");
         }
     });
 }
@@ -94,7 +103,7 @@ function translateLanguage(sourceLanguage, targetLanguage, sourceText, callback)
 function checkAnswer(spokenString, actualAnswerArray){
     for (var i = 0; i < actualAnswerArray.length; i++){
             if (spokenString.toLowerCase().includes(actualAnswerArray[i].toLowerCase())){
-                takePictureBtn.html("Take picture");
+                takePictureBtn.html('<i class="fa fa-camera" aria-hidden="true"></i>');
 
                 return swal(
                     'Good job!',
@@ -105,9 +114,9 @@ function checkAnswer(spokenString, actualAnswerArray){
     }
 
     translateLanguage("en", document.getElementById("FromLanguage").value, actualAnswerArray[0], function(translated) {
-        takePictureBtn.html("Take picture");
+        takePictureBtn.html('<i class="fa fa-camera" aria-hidden="true"></i>');
         swal(
-            'Oops', 'Should be "' +  translated  + '"',  'error'
+            'Oops', "Should be " + actualAnswerArray[0] + " -> " +  translated,  'error'
         );
     });
 }
@@ -291,7 +300,7 @@ function UpdateRecognizedPhrase(json) {
 }
 
 function OnComplete() {
-
+    recording = false;
     var fromLanguage = document.getElementById("FromLanguage").value;
     takePictureBtn.html('<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>');
 
