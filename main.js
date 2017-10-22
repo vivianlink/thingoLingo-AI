@@ -33,6 +33,10 @@ var constraints = {
     }
 };
 
+$(document).ready(function() {
+    $('select').niceSelect();
+});
+
 /* Stream it to video element */
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
     navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.mediaDevices.getUserMedia;
@@ -278,6 +282,7 @@ function UpdateRecognizedPhrase(json) {
 }
 
 function OnComplete() {
+
     var fromLanguage = document.getElementById("FromLanguage").value;
 
     translateLanguage(fromLanguage, recognizedPhrase, function(translated) {
