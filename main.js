@@ -36,3 +36,7 @@ function currentFrame() {
     return data;
 }
 
+function translateLanguage(deliveryLanguage, destinationLanguage){
+
+}
+
