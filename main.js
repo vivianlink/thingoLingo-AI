@@ -31,7 +31,7 @@ $(".js-take-picture").click(function() {
     // getCurrentItem();
     translateLanguage(fromLanguage, 'Plátano', function(translated) {
         console.log(translated);
-        checkAnswer(translated, "banana, apple");
+        checkAnswer(translated, ["orange", "banan", "apple"]);
     });
 });
 
@@ -70,8 +70,7 @@ function translateLanguage(sourceLanguage, sourceText, callback){
 
 function checkAnswer(spokenString, actualAnswerArray){
     for (var i = 0; i < actualAnswerArray.length; i++){
-        console.log(spokenString+".includes("+actualAnswerArray[i] + ")=" + spokenString.includes(actualAnswerArray[i]));
-        if (spokenString.includes(actualAnswerArray[i])){
+            if (spokenString.toLowerCase().includes(actualAnswerArray[i].toLowerCase())){
             return swal(
                 'Good job!',
                 actualAnswerArray[i] + ' is correct',
