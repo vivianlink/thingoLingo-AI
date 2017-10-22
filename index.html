@@ -9,8 +9,8 @@
 
 <body class="backgroundStyle">
 
-<div>
-    <select class="js-get-language" id="FromLanguage">
+<div class="wrapper-dropdown">
+    <select class="js-get-language dropdown" id="FromLanguage">
         <option selected value="es">Spanish</option>
         <option value="zh">Chinese</option>
         <option value="ru">Russian</option>
@@ -19,8 +19,10 @@
     </select>
 </div>
 <div align="center">
-    <video id="video"></video><br>
-    <button class="js-take-picture buttonStyle">Take picture</button><br>
+    <video id="video" class="video"></video><br>
+    <button class="js-take-picture buttonStyle">
+        <i class="fa fa-camera" aria-hidden="true"></i>
+    </button><br>
 </div>
 <script
         src="https://code.jquery.com/jquery-2.2.4.min.js"
@@ -38,5 +40,6 @@
 <!-- SDK REFERENCE -->
 <script src="speech.browser.sdk.js"></script>
 
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 </body>
 </html>
