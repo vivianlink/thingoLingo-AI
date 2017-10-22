@@ -1,4 +1,5 @@
 var GOOGLE_VISION_API_KEY = "AIzaSyDsrEnDMhouDfmFHEUHYKZTk2JjvSGcVP0";
+// var BING_SPEECH_API_KEY = "59863fb930624a56abaedf0f71579bd";
 var BING_SPEECH_API_KEY = "0025f47a1c084e208f9e6c3ed415f6f1";
 var width = 800;
 var height = 1200;
@@ -15,6 +16,7 @@ var languages = {
 
 var canvas = document.createElement('canvas');
 var video = document.getElementById('video');
+var takePictureBtn = $(".js-take-picture");
 
 video.setAttribute('playsinline', '');
 video.setAttribute('autoplay', '');
@@ -23,7 +25,7 @@ video.style.width = width + 'px';
 video.style.width = height + 'px';
 
 /* Setting up the constraint */
-var facingMode = "user";
+var facingMode = "environment";
 var constraints = {
     audio: false,
     video: {
@@ -38,7 +40,8 @@ navigator.mediaDevices.getUserMedia(constraints).then(function success(stream) {
     video.srcObject = stream;
 });
 
-$(".js-take-picture").click(function() {
+takePictureBtn.click(function() {
+    takePictureBtn.html('<i class="fa fa-assistive-listening-systems" aria-hidden="true"></i>');
     getCurrentItems(function(words) {
         recognizedWords = words;
     });
@@ -60,11 +63,11 @@ function getCurrentFrame() {
     return data;
 }
 
-function translateLanguage(sourceLanguage, sourceText, callback){
+function translateLanguage(sourceLanguage, targetLanguage, sourceText, callback){
     var data = {
         'q': sourceText,
         'source' : sourceLanguage,
-        'target': 'en'
+        'target': targetLanguage
     };
     $.ajax("https://translation.googleapis.com/language/translate/v2?key=" + GOOGLE_VISION_API_KEY, {
         method: "POST",
@@ -85,17 +88,22 @@ function translateLanguage(sourceLanguage, sourceText, callback){
 function checkAnswer(spokenString, actualAnswerArray){
     for (var i = 0; i < actualAnswerArray.length; i++){
             if (spokenString.toLowerCase().includes(actualAnswerArray[i].toLowerCase())){
-            return swal(
-                'Good job!',
-                actualAnswerArray[i] + ' is correct',
-                'success'
-            );
+                takePictureBtn.html("Take picture");
 
+                return swal(
+                    'Good job!',
+                    actualAnswerArray[i] + ' is correct',
+                    'success'
+                );
         }
     }
-    swal(
-        'Oops' ,  spokenString + ' is wrong!' ,  'error'
-    );
+
+    translateLanguage("en", document.getElementById("FromLanguage").value, actualAnswerArray[0], function(translated) {
+        takePictureBtn.html("Take picture");
+        swal(
+            'Oops', 'Should be "' +  translated  + '"',  'error'
+        );
+    });
 }
 
 function getCurrentItems(callback) {
@@ -260,6 +268,7 @@ function UpdateStatus(status) {
 }
 
 function UpdateRecognizedHypothesis(text, append) {
+    console.log("text");
 }
 
 function OnSpeechEndDetected() {
@@ -277,8 +286,9 @@ function UpdateRecognizedPhrase(json) {
 
 function OnComplete() {
     var fromLanguage = document.getElementById("FromLanguage").value;
+    takePictureBtn.html('<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>');
 
-    translateLanguage(fromLanguage, recognizedPhrase, function(translated) {
+    translateLanguage(fromLanguage, "en", recognizedPhrase, function(translated) {
         console.log("Recognized Words:");
         console.log(recognizedWords);
         console.log("");
