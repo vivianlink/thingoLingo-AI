@@ -3,6 +3,9 @@ var height = 800;
 
 var canvas = document.createElement('canvas');
 var video = document.createElement('video');
+
+var translatedText = null;
+
 video.setAttribute('playsinline', '');
 video.setAttribute('autoplay', '');
 video.setAttribute('muted', '');
@@ -36,7 +39,12 @@ function currentFrame() {
     return data;
 }
 
-function translateLanguage(deliveryLanguage, destinationLanguage){
-
+function translateLanguage(sourceText, targetLanguage){
+    $(document).ready(function(){
+        $.post('POST https://translation.googleapis.com/language/translate/v2?key=YOUR_API_KEY', {
+            'q': sourceText,
+            'target': targetLanguage
+        })
+    })
 }
 
