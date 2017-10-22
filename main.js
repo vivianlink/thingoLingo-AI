@@ -10,7 +10,9 @@ var recognizedPhrase = "";
 var languages = {
     "ru": "ru-RU",
     "es": "es-ES",
-    "zh": "zh-CN"
+    "zh": "zh-CN",
+    "ja": "ja-JP",
+    "pt": "pt-BR"
 };
 
 var canvas = document.createElement('canvas');
