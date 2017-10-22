@@ -1,3 +1,4 @@
+var GOOGLE_VISION_API_KEY = "AIzaSyDsrEnDMhouDfmFHEUHYKZTk2JjvSGcVP0";
 var width = 800;
 var height = 800;
 
@@ -15,7 +16,7 @@ video.style.width = height + 'px';
 document.body.appendChild(video);
 
 /* Setting up the constraint */
-var facingMode = "user"; // Can be 'user' or 'environment' to access back or front camera (NEAT!)
+var facingMode = "user";
 var constraints = {
     audio: false,
     video: {
@@ -28,7 +29,15 @@ navigator.mediaDevices.getUserMedia(constraints).then(function success(stream) {
     video.srcObject = stream;
 });
 
-function currentFrame() {
+$(".js-take-picture").click(function() {
+    var toLanguage = document.getElementById("ToLanguage").value;
+    var fromLanguage = document.getElementById("FromLanguage").value;
+    console.log("clicked!");
+    // getCurrentItem();
+    translateLanguage(fromLanguage, 'Banana', toLanguage);
+});
+
+function getCurrentFrame() {
     var context = canvas.getContext('2d');
     canvas.width = width;
     canvas.height = height;
@@ -36,15 +45,60 @@ function currentFrame() {
 
     var data = canvas.toDataURL();
 
+    data = data.replace("data:image/png;base64,", ""); // make it pure base64
+
     return data;
 }
 
-function translateLanguage(sourceText, targetLanguage){
-    $(document).ready(function(){
-        $.post('POST https://translation.googleapis.com/language/translate/v2?key=YOUR_API_KEY', {
-            'q': sourceText,
-            'target': targetLanguage
-        })
-    })
+function translateLanguage(sourceLanguage, sourceText, targetLanguage){
+    var data = {
+        'q': sourceText,
+        'target': targetLanguage,
+        'source' : sourceLanguage
+    };
+    $.ajax("https://translation.googleapis.com/language/translate/v2?key=" + GOOGLE_VISION_API_KEY, {
+        method: "POST",
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        success: function(response) {
+            console.log("ajax response");
+            console.log(response);
+        },
+        error: function(response) {
+            console.log("ajax error");
+            console.log(response.responseText);
+        }
+    });
 }
 
+function getCurrentItem() {
+    var data = {
+        requests: [
+            {
+                image: {
+                    content: getCurrentFrame()
+                },
+                features: [
+                    {
+                        type: "LABEL_DETECTION",
+                        maxResults: 100
+                    }
+                ]
+            }
+        ]
+    };
+
+    $.ajax("https://vision.googleapis.com/v1/images:annotate?key=" + GOOGLE_VISION_API_KEY, {
+        method: "POST",
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        success: function(response) {
+            console.log("ajax response");
+            console.log(response);
+        },
+        error: function(response) {
+            console.log("ajax error");
+            console.log(response.responseText);
+        }
+    });
+}

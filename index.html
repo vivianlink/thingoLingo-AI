@@ -7,25 +7,31 @@
 
 
 <div>From:
-    <select name="FromLanguage">
-        <option value="volvo">English</option>
+    <select class="js-get-language" id="FromLanguage">
+        <option selected value="en">English</option>
+        <option value="zh">Chinese</option>
+        <option value="es">Spanish</option>
+        <option value="ru">Russian</option>
     </select>
 </div>
 <div>To:
-    <select name="ToLanguage">
-        <option value="volvo">Spanish</option>
+    <select class="js-get-language" id="ToLanguage">
+        <option selected value="es">Spanish</option>
+        <option value="en">English</option>
+        <option value="zh">Chinese</option>
+        <option value="ru">Russian</option>
     </select>
 </div>
 
 <body>
 <h1>Lingo AI!</h1>
-
+<button class="js-take-picture">Take picture</button><br>
 <script
         src="https://code.jquery.com/jquery-2.2.4.min.js"
         integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
         crossorigin="anonymous"></script>
-<script src="main.js"></script><br>
-<button class="js-take-picture">Take picture</button>
+
+<script src="main.js"></script>
 
 </body>
 </html>
