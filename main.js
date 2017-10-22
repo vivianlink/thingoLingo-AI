@@ -1,19 +1,16 @@
+
 var GOOGLE_VISION_API_KEY = "AIzaSyDsrEnDMhouDfmFHEUHYKZTk2JjvSGcVP0";
 var width = 800;
-var height = 800;
+var height = 1200;
 
 var canvas = document.createElement('canvas');
-var video = document.createElement('video');
-
-var translatedText = null;
+var video = document.getElementById('video');
 
 video.setAttribute('playsinline', '');
 video.setAttribute('autoplay', '');
 video.setAttribute('muted', '');
 video.style.width = width + 'px';
 video.style.width = height + 'px';
-
-document.body.appendChild(video);
 
 /* Setting up the constraint */
 var facingMode = "user";
@@ -30,11 +27,12 @@ navigator.mediaDevices.getUserMedia(constraints).then(function success(stream) {
 });
 
 $(".js-take-picture").click(function() {
-    var toLanguage = document.getElementById("ToLanguage").value;
     var fromLanguage = document.getElementById("FromLanguage").value;
-    console.log("clicked!");
     // getCurrentItem();
-    translateLanguage(fromLanguage, 'Banana', toLanguage);
+    translateLanguage(fromLanguage, 'Plátano', function(translated) {
+        console.log(translated);
+        checkAnswer(translated, "banana, apple");
+    });
 });
 
 function getCurrentFrame() {
@@ -44,25 +42,24 @@ function getCurrentFrame() {
     context.drawImage(video, 0, 0, width, height);
 
     var data = canvas.toDataURL();
-
     data = data.replace("data:image/png;base64,", ""); // make it pure base64
-
     return data;
 }
 
-function translateLanguage(sourceLanguage, sourceText, targetLanguage){
+function translateLanguage(sourceLanguage, sourceText, callback){
     var data = {
         'q': sourceText,
-        'target': targetLanguage,
-        'source' : sourceLanguage
+        'source' : sourceLanguage,
+        'target': 'en'
     };
     $.ajax("https://translation.googleapis.com/language/translate/v2?key=" + GOOGLE_VISION_API_KEY, {
         method: "POST",
         data: JSON.stringify(data),
         contentType: "application/json",
         success: function(response) {
-            console.log("ajax response");
-            console.log(response);
+            // console.log(response);
+
+            callback(response.data.translations[0].translatedText);
         },
         error: function(response) {
             console.log("ajax error");
@@ -70,6 +67,24 @@ function translateLanguage(sourceLanguage, sourceText, targetLanguage){
         }
     });
 }
+
+function checkAnswer(spokenString, actualAnswerArray){
+    for (var i = 0; i < actualAnswerArray.length; i++){
+        console.log(spokenString+".includes("+actualAnswerArray[i] + ")=" + spokenString.includes(actualAnswerArray[i]));
+        if (spokenString.includes(actualAnswerArray[i])){
+            return swal(
+                'Good job!',
+                actualAnswerArray[i] + ' is correct',
+                'success'
+            );
+
+        }
+    }
+    swal(
+        'Oops' ,  spokenString + ' is wrong!' ,  'error'
+    );
+}
+
 
 function getCurrentItem() {
     var data = {

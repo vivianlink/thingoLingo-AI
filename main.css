@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css?family=Abril+Fatface|Raleway:600');
+
+.header{
+    font-family: 'Abril Fatface', cursive;
+    font-size: 85px;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    color: #39a6d7;
+}
+
+.backgroundStyle{
+    background-color: #b6cfde;
+}
+
+.buttonStyle{
+    border-color: #39a6d7;
+    background-color: white;
+    font-size: 30px;
+    border-radius: 30px;
+    padding: 10px;
+    font-family: 'Abril Fatface', cursive;
+    color: #39a6d7;
+}
+
+.buttonStyle:hover {
+    background-color: #39a6d7; /* Green */
+    color: white;
+    cursor: pointer;
+}
+
+.dropdown:hover{
+    background-color: #39a6d7; /* Green */
+    color: white;
+    cursor: pointer;
+}
