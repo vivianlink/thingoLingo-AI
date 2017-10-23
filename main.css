@@ -36,12 +36,12 @@
 
 .buttonStyle:hover {
     background-color: #39a6d7; /* Green */
-    color: white;
+    color: rgba(255, 248, 253, 0.93);
     cursor: pointer;
 }
 
 .dropdown:hover{
     background-color: #39a6d7; /* Green */
-    color: white;
+    color: #000000;
     cursor: pointer;
 }
