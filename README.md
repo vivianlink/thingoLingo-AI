@@ -4,4 +4,4 @@ Teaches new languages using real-life objects. Simply point your camera at the o
 
 More details and demo at https://devpost.com/software/thingolingo
 
-Use the app at thingolingo.me
+Use the app at https://thingolingo.me
